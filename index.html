@@ -41,24 +41,20 @@
         scanPeriod: 1
     };
     var scanner = new Instascan.Scanner(opts);
-  let count = -1;
-    function nextCamera(cameras){
-        count +=1;
-        if (count === cameras.length){
-            scanner.stop();
-        }
-        scanner.start(cameras[count]);
+    var camerasList = [];
+    var currentCameraIndex = -1;
 
-    }
     scanner.addListener('scan', function (content) {
         console.log(content);
         document.getElementById("content").innerHTML = content;
         scanner.stop();
     });
+
     function allow() {
         Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 0) {
-                nextCamera(cameras);
+                camerasList = cameras;
+                nextCamera();
             } else {
                 console.error('No cameras found.');
                 alert("No cameras found.");
@@ -66,6 +62,11 @@
         }).catch(function (e) {
             console.error(e);
         });
+    }
+
+    function nextCamera() {
+        currentCameraIndex = (currentCameraIndex + 1) % camerasList.length;
+        scanner.start(camerasList[currentCameraIndex]);
     }
 
 
