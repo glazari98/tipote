@@ -44,7 +44,7 @@
   let count = -1;
     function nextCamera(cameras){
         count +=1;
-        if (count === cameras.length()){
+        if (count === cameras.length){
             scanner.stop();
         }
         scanner.start(cameras[count]);
